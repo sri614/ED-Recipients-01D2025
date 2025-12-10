@@ -90,6 +90,11 @@ def normalize_for_matching(text: str) -> str:
     # Pattern 2: "Tier 1" at the end or standalone
     text = re.sub(r"\s*-?\s*Tier\s*\d+\s*", " ", text, flags=re.IGNORECASE)
 
+    # Normalize date format: convert "01 Dec" to "1 Dec" (remove leading zeros from day)
+    # This handles patterns like "01 Dec 2025" -> "1 Dec 2025"
+    text = re.sub(r'(\s|-)0(\d)\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)',
+                  r'\1\2 \3', text, flags=re.IGNORECASE)
+
     # Clean up extra hyphens and spaces
     text = re.sub(r"\s*-\s*-\s*", " - ", text)  # Remove double hyphens
     text = re.sub(r"\s*-\s*$", "", text)  # Remove trailing hyphen
