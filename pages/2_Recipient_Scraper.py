@@ -699,12 +699,18 @@ else:
         col1, col2 = st.columns([2, 8])
         with col1:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            # Save to scraped_history folder
+            history_folder = os.path.join(os.path.dirname(__file__), "scraped_history")
+            os.makedirs(history_folder, exist_ok=True)
+
             filename = f"recipient_data_{timestamp}.xlsx"
+            filepath = os.path.join(history_folder, filename)
 
             # Save to Excel with grouped format
-            df_grouped.to_excel(filename, index=False, sheet_name='Recipients')
+            df_grouped.to_excel(filepath, index=False, sheet_name='Recipients')
 
-            with open(filename, "rb") as file:
+            with open(filepath, "rb") as file:
                 st.download_button(
                     label="📥 Download Excel File",
                     data=file,
